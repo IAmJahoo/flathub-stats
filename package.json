@@ -1,0 +1,18 @@
+{
+  "name": "flathub-stats",
+  "version": "0.0.0",
+  "description": "Download stats for Flathub",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "keywords": [
+    "flathub"
+  ],
+  "author": "IAmJahoo",
+  "license": "ISC",
+  "devDependencies": {
+    "tslint": "^6.1.3",
+    "typescript": "^4.0.5"
+  }
+}
