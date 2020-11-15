@@ -1,4 +1,4 @@
-export function requestDataForTimeRange(requestFunction: (date: string) => void, timeRange: string[]) {
+export function requestDataForTimeRange(requestFunction: (date: string) => any, timeRange: string[]) {
     return timeRange.map(date => (
         {
             [date]: requestFunction(date)
