@@ -1,25 +1,31 @@
-import https from 'https';
+import superagent from "superagent";
 
-import config from './config';
+import config from "./config";
+import { requestDataForTimeRange } from "./requestDataForTimeRange";
+import { generatePathsForTimeRange } from "./generatePathsForTimeRange";
 
-export function main(): void {
-    console.log("Main function is running");
+function requestStatsForDate(datePath: string): Promise<any> {
+  const requestOptions = {
+    ...config.service,
+    path: `${config.service.pathBase}/${datePath}`,
+  };
 
-    const requestOptions = { ...config.service, path: "/stats/2018/04/29.json" };
-    console.log(`Performing request with options: ${JSON.stringify(requestOptions)}`)
-    const request = https.request(requestOptions, response => {
-        console.log(`Response status code: ${response.statusCode}`)
+  console.log(
+    "Requesting data for",
+    `${requestOptions.hostname}${requestOptions.path}`
+  );
+  return superagent.get(`${requestOptions.hostname}${requestOptions.path}`);
+}
 
-        response.on('data', data => {
-            process.stdout.write("Data received");
-        });
-    });
+export async function main(): Promise<void> {
+  console.log("Main function is running");
 
-    request.on('error', error => {
-        console.error(error)
-    })
+  console.log("Generating dates...");
+  const datePaths = generatePathsForTimeRange("2020, 01, 01", "2020, 01, 09");
 
-    request.end();
+  console.log("~~~ PERFORMING REQUESTS ~~~");
+  const data = await requestDataForTimeRange(requestStatsForDate, datePaths);
+  console.log("Result data", data);
 }
 
 main();
