@@ -1,10 +1,10 @@
-import superagent from "superagent";
+import superagent, { SuperAgentRequest } from "superagent";
 
 import config from "./config";
 import { requestDataForTimeRange } from "./requestDataForTimeRange";
 import { generatePathsForTimeRange } from "./generatePathsForTimeRange";
 
-function requestStatsForDate(datePath: string): Promise<any> {
+function requestStatsForDate(datePath: string): SuperAgentRequest {
   const requestOptions = {
     ...config.service,
     path: `${config.service.pathBase}/${datePath}`,
@@ -21,11 +21,11 @@ export async function main(): Promise<void> {
   console.log("Main function is running");
 
   console.log("Generating dates...");
-  const datePaths = generatePathsForTimeRange("2020, 01, 01", "2020, 01, 09");
+  const datePaths = generatePathsForTimeRange("2020, 01, 01", "2020, 01, 02");
 
   console.log("~~~ PERFORMING REQUESTS ~~~");
   const data = await requestDataForTimeRange(requestStatsForDate, datePaths);
-  console.log("Result data", data);
+  console.log("Result data items: ", data.length);
 }
 
 main();
