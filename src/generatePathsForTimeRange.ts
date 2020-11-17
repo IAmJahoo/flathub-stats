@@ -9,8 +9,8 @@ export function generatePathsForTimeRange(
   do {
     datesPaths.push(
       `${current.getFullYear()}/` +
-        `${"0" + (current.getMonth() + 1).toString().slice(-2)}/` +
-        `${"0" + current.getDate().toString().slice(-2)}.json`
+        `${("0" + (current.getMonth() + 1).toString()).slice(-2)}/` +
+        `${("0" + current.getDate().toString()).slice(-2)}.json`
     );
     current.setDate(current.getDate() + 1);
   } while (current <= untilDate);
