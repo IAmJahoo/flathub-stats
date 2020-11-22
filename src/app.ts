@@ -26,6 +26,16 @@ export async function main(): Promise<void> {
   console.log("~~~ PERFORMING REQUESTS ~~~");
   const data = await requestDataForTimeRange(requestStatsForDate, datePaths);
   console.log("Result data items: ", data.length);
+
+  const dataStore: any = {};
+
+  data.forEach((dataEntry, index) => {
+    console.log(Object.keys(dataEntry));
+    dataStore[dataEntry[datePaths[index]].date] =
+      dataEntry[datePaths[index]].refs;
+  });
+
+  console.log("Data Store: ", dataStore);
 }
 
 main();
