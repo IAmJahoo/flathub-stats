@@ -1,6 +1,6 @@
 import { expect } from "chai";
 
-import { transformDownloads, sumDownloadsForArchs, AppsData } from './summarizeDownloads';
+import { transformDownloads, sumDownloadsForArchs, calculateDownloadsPerApp, AppsData, CalculatedDownloadsForApp } from './summarizeDownloads';
 
 const exampleData: AppsData = {
     "cc.arduino.arduinoide": {
@@ -49,10 +49,31 @@ describe('Transform downloads', () => {
 });
 
 describe('Sum downloads for Architectures', () => {
-    it('should sum downloads for all architectures', () => {
-        expect(sumDownloadsForArchs(exampleData["cc.arduino.arduinoide"])).to.deep.equal({
-            downloads: 94,
-            downloadsWithUpdates: 178
-        })
+  it('should sum downloads for all architectures', () => {
+    expect(sumDownloadsForArchs(exampleData["cc.arduino.arduinoide"])).to.deep.equal({
+      downloads: 94,
+      downloadsWithUpdates: 178
     })
-})
+  })
+});
+
+describe("Calculate downloads per app", () => {
+  it('should represent data as summarized downloads as values of application', () => {
+    const expectedOutput: CalculatedDownloadsForApp = {
+      "cc.arduino.arduinoide": {
+        downloads: 94,
+        downloadsWithUpdates: 178
+      },
+      "cc.retroshare.retroshare-gui": {
+        downloads: 4,
+        downloadsWithUpdates: 5
+      },
+      "ch.openboard.OpenBoard": {
+        downloads: 34,
+        downloadsWithUpdates: 69
+      }
+    };
+
+    expect(calculateDownloadsPerApp(exampleData)).to.deep.equal(expectedOutput);
+  });
+});

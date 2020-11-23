@@ -7,9 +7,14 @@ type DownloadsPerArch = {
     [key: string]: number[];
 }
 
+export type CalculatedDownloadsForApp = {
+  [key: string]: Downloads;
+}
+
 export type AppsData = {
     [key: string]: DownloadsPerArch;
 }
+
 
 export function transformDownloads(downloadsArray: number[]): Downloads {
   const [downloads, downloadsWithUpdates] = downloadsArray.sort((a, b) => a - b);
@@ -34,4 +39,13 @@ export function sumDownloadsForArchs(downloadsPerArch: DownloadsPerArch): Downlo
     downloads: 0,
     downloadsWithUpdates: 0
   })
+}
+
+export function calculateDownloadsPerApp(appsRawData: AppsData): CalculatedDownloadsForApp {
+  const summarizedDownloads = {} as CalculatedDownloadsForApp;
+  Object.keys(appsRawData).forEach(app => {
+    summarizedDownloads[app] = sumDownloadsForArchs(appsRawData[app]);
+  });
+
+  return summarizedDownloads;
 }
