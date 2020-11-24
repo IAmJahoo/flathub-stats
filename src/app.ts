@@ -3,6 +3,7 @@ import superagent, { SuperAgentRequest } from "superagent";
 import config from "./config";
 import { requestDataForTimeRange } from "./requestDataForTimeRange";
 import { generatePathsForTimeRange } from "./generatePathsForTimeRange";
+import { calculateDownloadsPerApp } from "./summarizeDownloads";
 
 function requestStatsForDate(datePath: string): SuperAgentRequest {
   const requestOptions = {
@@ -21,7 +22,7 @@ export async function main(): Promise<void> {
   console.log("Main function is running");
 
   console.log("Generating dates...");
-  const datePaths = generatePathsForTimeRange("2020, 01, 01", "2020, 01, 02");
+  const datePaths = generatePathsForTimeRange("2020, 10, 22", "2020, 11, 22");
 
   console.log("~~~ PERFORMING REQUESTS ~~~");
   const data = await requestDataForTimeRange(requestStatsForDate, datePaths);
@@ -35,7 +36,11 @@ export async function main(): Promise<void> {
       dataEntry[datePaths[index]].refs;
   });
 
-  console.log("Data Store: ", dataStore);
+  Object.keys(dataStore).forEach(date => {
+    dataStore[date] = calculateDownloadsPerApp(dataStore[date]);
+  });
+
+  console.log(dataStore);
 }
 
 main();
